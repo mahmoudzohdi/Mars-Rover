@@ -3,7 +3,7 @@ import { InstractionsInterface } from "../app/types";
 import { generateInputInstructionsObject } from "../app/utils";
 
 describe("test generateInputInstructionsObject util", function () {
-  it("[happy senarios] should return the correct instractions object from string", function () {
+  it("[happy scenario] should return the correct instractions object from string", function () {
     const expectedResults: InstractionsInterface = {
       plateau: { x: 5, y: 5 },
       inputs: {
@@ -27,7 +27,7 @@ Rover2 Instructions:MMRMMRMRRM
 
     assert.deepEqual(instractionsObject, expectedResults);
   });
-  it("[bad senarios] should avoid empty lines and not depend on instructions sequence", () => {
+  it("[bad scenario] should avoid empty lines and not depend on instructions sequence", () => {
     const expectedResults: InstractionsInterface = {
       plateau: { x: 5, y: 5 },
       inputs: {
