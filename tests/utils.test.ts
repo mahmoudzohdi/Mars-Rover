@@ -6,6 +6,7 @@ import {
   LandingInterface,
 } from "../app/types";
 import {
+  calculateMovements,
   generateInputInstructionsObject,
   getFinalPositionOfRoverRobot,
   incrementBasedOnOrientation,
@@ -161,5 +162,25 @@ describe("test getFinalPositionOfRoverRobot util", function () {
       getFinalPositionOfRoverRobot(testData, plateau),
       expectedResults
     );
+  });
+});
+
+describe("test calculateMovements util", function () {
+  const instractions: InstractionsInterface = {
+    plateau: { x: 5, y: 5 },
+    inputs: {
+      robot1: {
+        landing: { x: 1, y: 2, orientation: "N" },
+        instractions: "LMLMLMLMM",
+      },
+      robot2: {
+        landing: { x: 3, y: 3, orientation: "E" },
+        instractions: "MMRMMRMRRM",
+      },
+    },
+  };
+  it("[happy scenario] should return the correct poition of the robot based on the instructions", function () {
+    const expectedResults: string[] = ["robot1:1 3 N", "robot2:5 1 E"];
+    assert.deepEqual(calculateMovements(instractions), expectedResults);
   });
 });
