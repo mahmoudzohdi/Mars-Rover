@@ -21,6 +21,7 @@ export const generateInputInstructionsObject = (
 ): InstractionsInterface => {
   return data.split("\n").reduce(
     (_inputInstructions: InstractionsInterface, order: string) => {
+      if (!order) return _inputInstructions;
       const orderArray = order.split(":");
       const orderName = orderArray[0].split(" ");
       if (orderName[0].toLowerCase() === "plateau") {
