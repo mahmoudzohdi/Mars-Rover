@@ -19,7 +19,7 @@ export const generateInputInstructionsObject = (
           landing: {
             x: +landingInstractionsArray[0],
             y: +landingInstractionsArray[1],
-            orientation: landingInstractionsArray[3] as Orientation,
+            orientation: landingInstractionsArray[2] as Orientation,
           },
           instractions: (_inputInstructions.inputs[orderName[0]] || {})
             .instractions,
