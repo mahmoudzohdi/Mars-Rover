@@ -1,4 +1,20 @@
-import { InstractionsInterface, Orientation } from "./types";
+import {
+  CoordinatesInterface,
+  InstractionsInputInterface,
+  InstractionsInterface,
+  LandingInterface,
+  Orientation,
+} from "./types";
+
+const orientationsSequence = {
+  N: 0,
+  E: 1,
+  S: 2,
+  W: 3,
+};
+const orientationsSequenceArray = Object.keys(
+  orientationsSequence
+) as Orientation[];
 
 export const generateInputInstructionsObject = (
   data: string
@@ -37,4 +53,96 @@ export const generateInputInstructionsObject = (
       inputs: {},
     }
   );
+};
+
+const incrementBasedOnOrientation = (
+  landing: LandingInterface,
+  plateau: CoordinatesInterface
+): LandingInterface => {
+  const tempLandingInfo = { ...landing };
+  switch (tempLandingInfo.orientation) {
+    case "N":
+      if (tempLandingInfo.y < plateau.y) {
+        tempLandingInfo.y = tempLandingInfo.y + 1;
+      }
+      return tempLandingInfo;
+    case "S":
+      if (tempLandingInfo.y > 0) {
+        tempLandingInfo.y = tempLandingInfo.y - 1;
+      }
+      return tempLandingInfo;
+    case "E":
+      if (tempLandingInfo.x < plateau.x) {
+        tempLandingInfo.x = tempLandingInfo.x + 1;
+      }
+      return tempLandingInfo;
+    case "W":
+      if (tempLandingInfo.x > 0) {
+        tempLandingInfo.x = tempLandingInfo.x - 1;
+      }
+      return tempLandingInfo;
+    default:
+      return tempLandingInfo;
+  }
+};
+
+const updateLandingOrientation = (
+  rotation: "L" | "R",
+  landing: LandingInterface
+): LandingInterface => {
+  const tempLandingInfo = { ...landing };
+
+  const incrementBy = rotation === "R" ? 1 : -1;
+
+  let nextOrientationIndex =
+    orientationsSequence[landing.orientation] + incrementBy;
+
+  if (
+    rotation === "R" &&
+    nextOrientationIndex === orientationsSequenceArray.length
+  ) {
+    tempLandingInfo.orientation = orientationsSequenceArray[0];
+  } else if (rotation === "L" && nextOrientationIndex < 0) {
+    tempLandingInfo.orientation =
+      orientationsSequenceArray[orientationsSequenceArray.length - 1];
+  } else {
+    tempLandingInfo.orientation =
+      orientationsSequenceArray[nextOrientationIndex];
+  }
+  return tempLandingInfo;
+};
+
+export const getFinalPositionOfRoverRobot = (
+  input: InstractionsInputInterface,
+  plateau: CoordinatesInterface
+): string => {
+  const movementsArrya = input.instractions.split("");
+  let tempLandingInfo = { ...input.landing };
+  for (let movement of movementsArrya) {
+    switch (movement) {
+      case "L":
+      case "R":
+        tempLandingInfo = updateLandingOrientation(movement, tempLandingInfo);
+        break;
+      case "M":
+        tempLandingInfo = incrementBasedOnOrientation(tempLandingInfo, plateau);
+        break;
+      default:
+        break;
+    }
+  }
+
+  const { x, y, orientation } = tempLandingInfo;
+  return `${x} ${y} ${orientation}`;
+};
+
+export const calculateMovements = (instractions: InstractionsInterface) => {
+  for (let roverRobotName in instractions.inputs) {
+    console.log(
+      `${roverRobotName}:${getFinalPositionOfRoverRobot(
+        instractions.inputs[roverRobotName],
+        instractions.plateau
+      )}`
+    );
+  }
 };

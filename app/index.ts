@@ -1,10 +1,10 @@
 import fs from "fs";
-import { generateInputInstructionsObject } from "./utils";
+import { calculateMovements, generateInputInstructionsObject } from "./utils";
 
 const readTextFile = (filePath: string) => {
   fs.readFile(filePath, "utf8", function (err, data) {
     if (err) throw err;
-    console.log(generateInputInstructionsObject(data));
+    calculateMovements(generateInputInstructionsObject(data));
   });
 };
 
