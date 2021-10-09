@@ -11,7 +11,12 @@ export interface InstractionsInputInterface {
   landing: LandingInterface;
   instractions: string;
 }
+
+interface InstractionsInputsInterface {
+  [key: string]: InstractionsInputInterface;
+}
+
 export interface InstractionsInterface {
   plateau: CoordinatesInterface;
-  inputs: { [key: string]: InstractionsInputInterface };
+  inputs: InstractionsInputsInterface;
 }
