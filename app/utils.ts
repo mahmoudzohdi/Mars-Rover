@@ -91,7 +91,7 @@ export const incrementBasedOnOrientation = (
   }
 };
 
-const updateLandingOrientation = (
+export const updateLandingOrientation = (
   rotation: "L" | "R",
   landing: LandingInterface
 ): LandingInterface => {

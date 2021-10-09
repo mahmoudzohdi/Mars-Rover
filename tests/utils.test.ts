@@ -7,6 +7,7 @@ import {
 import {
   generateInputInstructionsObject,
   incrementBasedOnOrientation,
+  updateLandingOrientation,
 } from "../app/utils";
 
 describe("test generateInputInstructionsObject util", function () {
@@ -73,9 +74,8 @@ describe("test incrementBasedOnOrientation util", function () {
       orientation: "N",
     };
     const expectedResults: LandingInterface = {
-      x: 1,
+      ...testData,
       y: 3,
-      orientation: "N",
     };
     assert.deepEqual(
       incrementBasedOnOrientation(testData, plateau),
@@ -88,15 +88,7 @@ describe("test incrementBasedOnOrientation util", function () {
       y: 5,
       orientation: "N",
     };
-    const expectedResults: LandingInterface = {
-      x: 0,
-      y: 5,
-      orientation: "N",
-    };
-    assert.deepEqual(
-      incrementBasedOnOrientation(testData, plateau),
-      expectedResults
-    );
+    assert.deepEqual(incrementBasedOnOrientation(testData, plateau), testData);
   });
   it("[happy scenario] should decrement x by 1", function () {
     const testData: LandingInterface = {
@@ -105,9 +97,8 @@ describe("test incrementBasedOnOrientation util", function () {
       orientation: "W",
     };
     const expectedResults: LandingInterface = {
+      ...testData,
       x: 0,
-      y: 2,
-      orientation: "W",
     };
     assert.deepEqual(
       incrementBasedOnOrientation(testData, plateau),
@@ -120,14 +111,27 @@ describe("test incrementBasedOnOrientation util", function () {
       y: 2,
       orientation: "W",
     };
-    const expectedResults: LandingInterface = {
+    assert.deepEqual(incrementBasedOnOrientation(testData, plateau), testData);
+  });
+});
+
+describe("test updateLandingOrientation util", function () {
+  it("[happy scenario] should rotate orientation from N to E when rotation is 'R'", function () {
+    const testData: LandingInterface = {
       x: 0,
       y: 2,
-      orientation: "W",
+      orientation: "N",
     };
-    assert.deepEqual(
-      incrementBasedOnOrientation(testData, plateau),
-      expectedResults
-    );
+    const expectedResults = { ...testData, orientation: "E" };
+    assert.deepEqual(updateLandingOrientation("R", testData), expectedResults);
+  });
+  it("[bad scenario] should rotate orientation back from N to W when rotation is 'L'", function () {
+    const testData: LandingInterface = {
+      x: 0,
+      y: 2,
+      orientation: "N",
+    };
+    const expectedResults = { ...testData, orientation: "W" };
+    assert.deepEqual(updateLandingOrientation("L", testData), expectedResults);
   });
 });
