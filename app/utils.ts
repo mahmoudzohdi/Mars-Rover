@@ -60,7 +60,7 @@ export const generateInputInstructionsObject = (
     );
 };
 
-const incrementBasedOnOrientation = (
+export const incrementBasedOnOrientation = (
   landing: LandingInterface,
   plateau: CoordinatesInterface
 ): LandingInterface => {
