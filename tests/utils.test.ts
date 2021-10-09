@@ -1,33 +1,23 @@
 import assert from "assert";
-import { InstractionsInterface } from "../app/types";
-import { generateInputInstructionsObject } from "../app/utils";
+import {
+  CoordinatesInterface,
+  InstractionsInterface,
+  LandingInterface,
+} from "../app/types";
+import {
+  generateInputInstructionsObject,
+  incrementBasedOnOrientation,
+} from "../app/utils";
 
 describe("test generateInputInstructionsObject util", function () {
   it("[happy scenario] should return the correct instractions object from string", function () {
-    const expectedResults: InstractionsInterface = {
-      plateau: { x: 5, y: 5 },
-      inputs: {
-        Rover1: {
-          landing: { x: 1, y: 2, orientation: "N" },
-          instractions: "LMLMLMLMM",
-        },
-        Rover2: {
-          landing: { x: 3, y: 3, orientation: "E" },
-          instractions: "MMRMMRMRRM",
-        },
-      },
-    };
-    const instractionsObject = generateInputInstructionsObject(`
+    const testData = generateInputInstructionsObject(`
 Plateau:5 5
 Rover1 Landing:1 2 N
 Rover1 Instructions:LMLMLMLMM
 Rover2 Landing:3 3 E
 Rover2 Instructions:MMRMMRMRRM
     `);
-
-    assert.deepEqual(instractionsObject, expectedResults);
-  });
-  it("[bad scenario] should avoid empty lines and not depend on instructions sequence", () => {
     const expectedResults: InstractionsInterface = {
       plateau: { x: 5, y: 5 },
       inputs: {
@@ -41,7 +31,11 @@ Rover2 Instructions:MMRMMRMRRM
         },
       },
     };
-    const instractionsObject = generateInputInstructionsObject(`
+
+    assert.deepEqual(testData, expectedResults);
+  });
+  it("[bad scenario] should avoid empty lines and not depend on instructions sequence", () => {
+    const testData = generateInputInstructionsObject(`
 
     Plateau:5 5
 
@@ -53,7 +47,87 @@ Rover2 Instructions:MMRMMRMRRM
 
 Rover1 Landing:1 2 N
     `);
+    const expectedResults: InstractionsInterface = {
+      plateau: { x: 5, y: 5 },
+      inputs: {
+        Rover1: {
+          landing: { x: 1, y: 2, orientation: "N" },
+          instractions: "LMLMLMLMM",
+        },
+        Rover2: {
+          landing: { x: 3, y: 3, orientation: "E" },
+          instractions: "MMRMMRMRRM",
+        },
+      },
+    };
+    assert.deepEqual(testData, expectedResults);
+  });
+});
 
-    assert.deepEqual(instractionsObject, expectedResults);
+describe("test incrementBasedOnOrientation util", function () {
+  const plateau: CoordinatesInterface = { x: 5, y: 5 };
+  it("[happy scenario] should increment y by 1", function () {
+    const testData: LandingInterface = {
+      x: 1,
+      y: 2,
+      orientation: "N",
+    };
+    const expectedResults: LandingInterface = {
+      x: 1,
+      y: 3,
+      orientation: "N",
+    };
+    assert.deepEqual(
+      incrementBasedOnOrientation(testData, plateau),
+      expectedResults
+    );
+  });
+  it("[bad scenario] should not increment y because it's value equals the plateau.y", function () {
+    const testData: LandingInterface = {
+      x: 0,
+      y: 5,
+      orientation: "N",
+    };
+    const expectedResults: LandingInterface = {
+      x: 0,
+      y: 5,
+      orientation: "N",
+    };
+    assert.deepEqual(
+      incrementBasedOnOrientation(testData, plateau),
+      expectedResults
+    );
+  });
+  it("[happy scenario] should decrement x by 1", function () {
+    const testData: LandingInterface = {
+      x: 1,
+      y: 2,
+      orientation: "W",
+    };
+    const expectedResults: LandingInterface = {
+      x: 0,
+      y: 2,
+      orientation: "W",
+    };
+    assert.deepEqual(
+      incrementBasedOnOrientation(testData, plateau),
+      expectedResults
+    );
+  });
+  it("[bad scenario] should not decrement x because it's value equals 0", function () {
+    const testData: LandingInterface = {
+      x: 0,
+      y: 2,
+      orientation: "W",
+    };
+    const expectedResults: LandingInterface = {
+      x: 0,
+      y: 2,
+      orientation: "W",
+    };
+    assert.deepEqual(
+      incrementBasedOnOrientation(testData, plateau),
+      expectedResults
+    );
   });
 });
