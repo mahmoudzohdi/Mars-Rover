@@ -141,7 +141,9 @@ export const getFinalPositionOfRoverRobot = (
   return `${x} ${y} ${orientation}`;
 };
 
-export const calculateMovements = (instractions: InstractionsInterface) => {
+export const calculateMovements = (
+  instractions: InstractionsInterface
+): string[] => {
   const finalMovements = [];
   for (let roverRobotName in instractions.inputs) {
     finalMovements.push(
@@ -151,5 +153,5 @@ export const calculateMovements = (instractions: InstractionsInterface) => {
       )}`
     );
   }
-  return finalMovements.join("\n");
+  return finalMovements;
 };
