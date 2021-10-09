@@ -1,11 +1,13 @@
 import assert from "assert";
 import {
   CoordinatesInterface,
+  InstractionsInputInterface,
   InstractionsInterface,
   LandingInterface,
 } from "../app/types";
 import {
   generateInputInstructionsObject,
+  getFinalPositionOfRoverRobot,
   incrementBasedOnOrientation,
   updateLandingOrientation,
 } from "../app/utils";
@@ -133,5 +135,31 @@ describe("test updateLandingOrientation util", function () {
     };
     const expectedResults = { ...testData, orientation: "W" };
     assert.deepEqual(updateLandingOrientation("L", testData), expectedResults);
+  });
+});
+
+describe("test getFinalPositionOfRoverRobot util", function () {
+  const plateau: CoordinatesInterface = { x: 5, y: 5 };
+  const baseTestData: InstractionsInputInterface = {
+    landing: { x: 1, y: 2, orientation: "N" },
+    instractions: "LMLMLMLMM",
+  };
+  it("[happy scenario] should return the correct poition of the robot based on the instructions", function () {
+    const expectedResults: string = "1 3 N";
+    assert.equal(
+      getFinalPositionOfRoverRobot(baseTestData, plateau),
+      expectedResults
+    );
+  });
+  it("[bad scenario] should return the same robot position because there are no instructions", function () {
+    const testData: InstractionsInputInterface = {
+      ...baseTestData,
+      instractions: "",
+    };
+    const expectedResults: string = "1 2 N";
+    assert.equal(
+      getFinalPositionOfRoverRobot(testData, plateau),
+      expectedResults
+    );
   });
 });
