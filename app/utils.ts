@@ -137,12 +137,14 @@ export const getFinalPositionOfRoverRobot = (
 };
 
 export const calculateMovements = (instractions: InstractionsInterface) => {
+  const finalMovements = [];
   for (let roverRobotName in instractions.inputs) {
-    console.log(
+    finalMovements.push(
       `${roverRobotName}:${getFinalPositionOfRoverRobot(
         instractions.inputs[roverRobotName],
         instractions.plateau
       )}`
     );
   }
+  return finalMovements.join("\n");
 };
